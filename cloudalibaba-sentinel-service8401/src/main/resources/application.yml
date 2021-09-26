@@ -8,13 +8,23 @@ spring:
     nacos:
       discovery:
         #Nacos服务注册中心地址
-        server-addr: http://192.168.15.129:8888
+#        server-addr: http://192.168.15.129:8888
+        server-addr: http://localhost:8848
     sentinel:
       transport:
         #配置Sentinel dashboard地址
-        dashboard: http://192.168.15.129:8858
+#        dashboard: http://192.168.15.129:8858
+        dashboard: http://192.168.181.128:8858
         #默认8719端口，假如被占用会自动从8719开始依次+1扫描,直至找到未被占用的端口
         port: 8719
+      datasource:
+        ds1:
+          nacos:
+            server-addr: localhost:8848
+            dataId: ${spring.application.name}
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
 
 management:
   endpoints:
