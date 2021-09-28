@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
@@ -41,7 +42,22 @@ public class DataSourceProxyConfig {
     public SqlSessionFactory sqlSessionFactory(DataSourceProxy dataSourceProxy) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSourceProxy);
-        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResource(mapperLocations));
+
+//      sqlSessionFactoryBean调用的方法中setMapperLocations可能是导致读取不到mapper资源的原因
+//
+//关于PathMatchingResourcePatternResolver : https://www.cnblogs.com/loveLands/articles/9863195.html
+//果然getResource 和 getResources不同
+//
+//getResource()：
+//1.从类的根路径下获取文件
+//getResources():
+//1.获取所有类路径下的指定文件
+//可以通过classpath前缀指定，从所有的类路径下获取指定文件，与classpath前缀的区别是classpath前缀只能获取当类路径下的资源文件，而classpath前缀可以获取所有类路径下的资源文件，包括jar包中的。
+//      sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResource(mapperLocations));
+
+
+
+        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(mapperLocations));
         sqlSessionFactoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
         return sqlSessionFactoryBean.getObject();
     }
