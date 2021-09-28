@@ -1,7 +1,7 @@
 package com.atguigu.springcloud.seataorder.service.impl;
 
-import com.atguigu.springcloud.seataorder.dao.OrderDao;
 import com.atguigu.springcloud.seataorder.domain.Order;
+import com.atguigu.springcloud.seataorder.dao.OrderDao;
 import com.atguigu.springcloud.seataorder.service.AccountService;
 import com.atguigu.springcloud.seataorder.service.OrderService;
 import com.atguigu.springcloud.seataorder.service.StorageService;
@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
 
         //修改订单状态为已完成
         log.info("-----------> order-service 中 修改订单状态 开始 ");
-        orderDao.update(order.getUserId(),order.getStatus());
+        orderDao.update(order.getUserId(),0);
         log.info("-----------> order-service 中 修改订单状态 完成 ");
 
         log.info("------->下单结束");

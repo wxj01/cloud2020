@@ -4,7 +4,7 @@ server:
 
 spring:
   application:
-    name: seata-accout-service
+    name: seata-account-service
   cloud:
     alibaba:
       seata:

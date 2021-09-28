@@ -32,15 +32,16 @@ public class DataSourceProxyConfig {
     }
 
     @Bean
-    public DataSourceProxy dataSourceProxy(DataSourceProxy dataSourceProxy){
-        return  new DataSourceProxy(dataSourceProxy);
+    public DataSourceProxy dataSourceProxy(DataSource dataSource){
+        return  new DataSourceProxy(dataSource);
     }
 
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSourceProxy dataSourceProxy) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSourceProxy);
-        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResource(mapperLocations));
+//        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResource(mapperLocations));
+        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(mapperLocations));
         sqlSessionFactoryBean.setTransactionFactory(new SpringManagedTransactionFactory());
         return sqlSessionFactoryBean.getObject();
 
