@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication
 @EnableEurekaClient
-//@RibbonClient(name = "CLOUD-PAYMENT-SERVICE",configuration = MySelfRule.class)
+@RibbonClient(name = "CLOUD-PAYMENT-SERVICE",configuration = MySelfRule.class)
 public class OrderMain80 {
     public static void main(String[] args) {
         SpringApplication.run(OrderMain80.class,args);
@@ -26,7 +26,7 @@ public class OrderMain80 {
 
 
     @Bean
-    @LoadBalanced //使用@LoadBalanced注解赋予RestTemplate负载均衡的能力
+//    @LoadBalanced //使用@LoadBalanced注解赋予RestTemplate负载均衡的能力
     public RestTemplate getRestTemplate(){
         return new RestTemplate();
     }
