@@ -13,7 +13,8 @@ spring:
         server-addr: localhost:8848
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#    driver-class-name: com.mysql.jdbc.Driver #mysql5
+    driver-class-name: com.mysql.cj.jdbc.Driver  #mysql8
     url: jdbc:mysql://localhost:3306/seata_order
     username: root
     password: root
