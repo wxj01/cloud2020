@@ -16,6 +16,7 @@ public class MySelfRule {
 
     @Bean
     public IRule myRule(){
+        System.out.println("123");
         return new RandomRule();
     }
 }

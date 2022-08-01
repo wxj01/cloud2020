@@ -1,14 +1,11 @@
 package com.atguigu.springcloud;
 
-import com.atguigu.myrule.MySelfRule;
-//import com.atguigu.springcloud.myrule.MySelfRule;
+import com.atguigu.myrule.RoundRobinRule;
+import com.atguigu.springcloud.config.CustomerConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author Administrator
@@ -18,16 +15,16 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication
 @EnableEurekaClient
-@RibbonClient(name = "CLOUD-PAYMENT-SERVICE",configuration = MySelfRule.class)
+@RibbonClient(name = "CLOUD-PAYMENT-SERVICE",configuration = CustomerConfig.class)
 public class OrderMain80 {
     public static void main(String[] args) {
         SpringApplication.run(OrderMain80.class,args);
     }
 
 
-    @Bean
+//    @Bean
 //    @LoadBalanced //使用@LoadBalanced注解赋予RestTemplate负载均衡的能力
-    public RestTemplate getRestTemplate(){
-        return new RestTemplate();
-    }
+//    public RestTemplate getRestTemplate(){
+//        return new RestTemplate();
+//    }
 }
