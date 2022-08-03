@@ -1,9 +1,11 @@
 package com.atguigu.myrule;
 
+import com.atguigu.springcloud.util.FeatureContext;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
+import org.aspectj.weaver.ast.Var;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +20,6 @@ public class RoundRobinRule extends AbstractLoadBalancerRule {
     private AtomicInteger nextServerCyclicCounter;
     private static final boolean AVAILABLE_ONLY_SERVERS = true;
     private static final boolean ALL_SERVERS = false;
-
-    private String specificBranches = "consul-provider-payment-8006";
 
     private static Logger log = LoggerFactory.getLogger(RoundRobinRule.class);
 
@@ -55,10 +55,12 @@ public class RoundRobinRule extends AbstractLoadBalancerRule {
             int serverCount = allServers.size();
 
             // 这是通过特定参数分支获取对应的服务
+            String specificBranches = FeatureContext.get();
             Optional<Server> payment8001 = allServers.stream().filter(server1 -> server1.getMetaInfo().getInstanceId().equals(specificBranches)).findAny();
-            Server server1 = payment8001.get();
-            System.out.println(server1.getPort());
-
+            Server specificFeatureServer = payment8001.get();
+            if (specificFeatureServer != null) {
+                return specificFeatureServer;
+            }
 
 
             //判断服务是否为0
@@ -95,14 +97,14 @@ public class RoundRobinRule extends AbstractLoadBalancerRule {
 
     /**
      * Inspired by the implementation of {@link
-    AtomicInteger#incrementAndGet()}.
+     * AtomicInteger#incrementAndGet()}.
      *
      * @param modulo The modulo to bound the value of the counter.
      * @return The next value.
-    说白了就是用来获取list.size()之间的某一个服务
+     * 说白了就是用来获取list.size()之间的某一个服务
      */
     private int incrementAndGetModulo(int modulo) {
-        for (;;) {
+        for (; ; ) {
             //用CAS来实现，nextServerCyclicCounter是这个类的私有属性，原子类
             int current = nextServerCyclicCounter.get();
             int next = (current + 1) % modulo;
@@ -116,7 +118,7 @@ public class RoundRobinRule extends AbstractLoadBalancerRule {
 
     @Override
     public void initWithNiwsConfig(IClientConfig iClientConfig) {
-        System.out.println("iClientConfig:"+iClientConfig);
+        System.out.println("iClientConfig:" + iClientConfig);
         System.out.println(iClientConfig.getClientName());
         System.out.println(iClientConfig.getNameSpace());
         System.out.println(iClientConfig.getProperties());
